@@ -83,12 +83,11 @@ textarea.memo{width:100%;min-width:160px;min-height:58px;border:1px solid #d5d9e
   </div>
   <div class="stats" id="stats"></div>
   <div class="f">
-    <input id="q" type="search" placeholder="이름·연락처·문의내용 검색">
+    <input id="q" type="search" placeholder="회사명·담당자·연락처·이메일·문의내용 검색">
     <select id="fs" aria-label="상태 필터"><option value="">전체 상태</option><option>신규</option><option>연락완료</option><option>계약</option><option>보류</option></select>
-    <select id="ft" aria-label="광고유형 필터"><option value="">전체 광고유형</option><option>검색광고</option><option>디스플레이광고</option><option>옥외광고</option><option>바이럴광고</option><option>인플루언서 시딩</option></select>
   </div>
   <div class="tbl"><table>
-    <thead><tr><th>접수일시</th><th>이름/브랜드</th><th>연락처</th><th>광고유형</th><th>홈페이지</th><th>문의내용</th><th>상태</th><th>메모</th></tr></thead>
+    <thead><tr><th>접수일시</th><th>회사명/브랜드명</th><th>담당자</th><th>연락처</th><th>이메일</th><th>문의내용</th><th>상태</th><th>메모</th></tr></thead>
     <tbody id="tb"></tbody></table>
     <div class="empty" id="empty" hidden>표시할 문의가 없습니다.</div>
   </div>
@@ -129,20 +128,19 @@ textarea.memo{width:100%;min-width:160px;min-height:58px;border:1px solid #d5d9e
   function td(label){var t=document.createElement('td');t.setAttribute('data-l',label);return t}
   function render(){
     renderStats();
-    var q=$('q').value.trim().toLowerCase(),ft=$('ft').value,fs=$('fs').value;statusFilter=fs;
+    var q=$('q').value.trim().toLowerCase(),fs=$('fs').value;statusFilter=fs;
     var list=rows.filter(function(r){
       if(fs&&r.status!==fs)return false;
-      if(ft&&String(r.types).indexOf(ft)<0)return false;
-      if(q&&(r.name+' '+r.phone+' '+r.msg+' '+r.site).toLowerCase().indexOf(q)<0)return false;
+      if(q&&(r.company+' '+r.name+' '+r.phone+' '+r.email+' '+r.msg).toLowerCase().indexOf(q)<0)return false;
       return true});
     var tb=$('tb');tb.innerHTML='';$('empty').hidden=list.length>0;
     list.forEach(function(r){
       var tr=document.createElement('tr');
       var c=td('접수일시');c.textContent=r.at;tr.appendChild(c);
-      c=td('이름/브랜드');c.textContent=r.name;c.style.fontWeight='700';tr.appendChild(c);
+      c=td('회사명/브랜드명');c.textContent=r.company;c.style.fontWeight='700';tr.appendChild(c);
+      c=td('담당자');c.textContent=r.name;tr.appendChild(c);
       c=td('연락처');var a=el('a',null,r.phone);a.href='tel:'+String(r.phone).replace(/[^0-9+]/g,'');c.appendChild(a);tr.appendChild(c);
-      c=td('광고유형');String(r.types||'').split(',').forEach(function(t){t=t.trim();if(t)c.appendChild(el('span','tag',t))});tr.appendChild(c);
-      c=td('홈페이지');if(r.site){var u=String(r.site);var l=el('a',null,u);if(/^https?:\/\//i.test(u)){l.href=u;l.target='_blank';l.rel='noopener noreferrer'}c.appendChild(l)}tr.appendChild(c);
+      c=td('이메일');var em=el('a',null,r.email);em.href='mailto:'+r.email;c.appendChild(em);tr.appendChild(c);
       c=td('문의내용');c.className='msg';c.textContent=r.msg;tr.appendChild(c);
       c=td('상태');var s=el('select','s');['신규','연락완료','계약','보류'].forEach(function(o){var op=el('option',null,o);if(o===r.status)op.selected=true;s.appendChild(op)});s.setAttribute('data-v',r.status);
       s.onchange=function(){r.status=s.value;s.setAttribute('data-v',s.value);save(r);renderStats()};c.appendChild(s);tr.appendChild(c);
@@ -155,15 +153,15 @@ textarea.memo{width:100%;min-width:160px;min-height:58px;border:1px solid #d5d9e
   }
   function csvCell(v){v=String(v==null?'':v);if(/^[=+\-@]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"'}
   $('csv').onclick=function(){
-    var h=['접수일시','이름/브랜드','연락처','광고유형','홈페이지','문의내용','상태','메모'];
-    var out=[h.map(csvCell).join(',')].concat(rows.map(function(r){return [r.at,r.name,r.phone,r.types,r.site,r.msg,r.status,r.memo].map(csvCell).join(',')}));
+    var h=['접수일시','회사명/브랜드명','담당자','연락처','이메일','문의내용','상태','메모'];
+    var out=[h.map(csvCell).join(',')].concat(rows.map(function(r){return [r.at,r.company,r.name,r.phone,r.email,r.msg,r.status,r.memo].map(csvCell).join(',')}));
     var b=new Blob(['﻿'+out.join('\r\n')],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');
     a.href=URL.createObjectURL(b);a.download='neosad_inquiries_'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();a.remove()
   };
   $('refresh').onclick=function(){login(pw,true).then(function(){toast('새로고침했습니다')})};
   $('logout').onclick=function(){store(KEY,null);pw='';rows=[];$('app').hidden=true;$('login').hidden=false;$('pw').value=''};
   $('lf').onsubmit=function(e){e.preventDefault();login($('pw').value)};
-  $('q').oninput=render;$('ft').onchange=render;$('fs').onchange=render;
+  $('q').oninput=render;$('fs').onchange=render;
   var saved=load(KEY);if(saved)login(saved,true);
 })();
 </script>

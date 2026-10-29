@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="color-scheme" content="light">
+<title>문의 관리자 - 네오스애드</title>
+<link rel="icon" href="/favicon.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{--ink:#0b0d26;--blue:#2f6bff;--violet:#7a5cff;--bg:#f5f6fc;--line:#e3e6f2;--muted:#5b6078;--red:#e5484d;--green:#18a957;color-scheme:light;
+  font-family:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+*{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:#14162b;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+.login{min-height:100vh;display:grid;place-items:center;padding:20px}
+.card{width:min(100%,380px);background:#fff;border:1px solid var(--line);border-radius:22px;padding:32px;box-shadow:0 20px 50px rgba(20,22,43,.08)}
+.card img{height:40px;display:block;margin-bottom:22px}
+.card h1{font-size:22px;font-weight:800;letter-spacing:-.03em}.card p{margin-top:8px;font-size:14px;color:var(--muted);line-height:1.6}
+.card input{width:100%;margin-top:18px;height:48px;border:1px solid #d5d9ec;border-radius:12px;padding:0 14px;font-size:16px}
+.card input:focus,.f input:focus,.f select:focus{outline:3px solid rgba(122,92,255,.35);border-color:var(--violet)}
+.btn{height:46px;padding:0 20px;border:0;border-radius:12px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer}
+.btn:hover{background:var(--violet)}.btn.ghost{background:#fff;color:#14162b;border:1px solid var(--line)}.btn.ghost:hover{border-color:var(--violet);color:var(--violet)}
+.card .btn{width:100%;margin-top:14px}
+.err{margin-top:12px;font-size:14px;color:var(--red);min-height:1.2em}
+.app{max-width:1280px;margin:0 auto;padding:24px clamp(14px,3vw,32px) 60px}
+.bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.bar h1{font-size:22px;font-weight:800;letter-spacing:-.03em;margin-right:auto}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.st{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 18px;min-width:110px;cursor:pointer;text-align:left}
+.st b{display:block;font-size:24px;font-weight:800}.st span{font-size:13px;color:var(--muted)}
+.st.on{border-color:var(--violet);box-shadow:0 0 0 3px rgba(122,92,255,.15)}
+.f{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.f input,.f select{height:42px;border:1px solid #d5d9ec;border-radius:10px;padding:0 12px;background:#fff}
+.f input{flex:1;min-width:200px}
+.tbl{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{background:#fafbff;text-align:left;font-size:12.5px;color:var(--muted);padding:12px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.55}
+tr:last-child td{border-bottom:0}
+td.msg{max-width:340px;white-space:pre-wrap;word-break:break-word}
+td a{color:var(--blue);font-weight:600;word-break:break-all}
+.tag{display:inline-block;margin:0 4px 4px 0;padding:3px 9px;border-radius:999px;background:#e4ecff;color:var(--blue);font-size:12px;font-weight:700}
+select.s{height:36px;border:1px solid #d5d9ec;border-radius:9px;padding:0 8px;background:#fff;font-weight:700}
+select.s[data-v="신규"]{background:#ffe9ea;color:var(--red);border-color:#ffc9cc}
+select.s[data-v="연락완료"]{background:#e4ecff;color:var(--blue);border-color:#c8d8ff}
+select.s[data-v="계약"]{background:#dcf6e8;color:#0f7a3f;border-color:#b7e8cc}
+select.s[data-v="보류"]{background:#eef0f7;color:#6a6f8a}
+textarea.memo{width:100%;min-width:160px;min-height:58px;border:1px solid #d5d9ec;border-radius:9px;padding:8px 10px;font-size:13.5px;resize:vertical}
+.empty{padding:50px 20px;text-align:center;color:var(--muted)}
+.note{margin-top:14px;font-size:12.5px;color:#8a8fa8}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#14162b;color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s}
+.toast.on{opacity:1}
+.warn{background:#fff7e6;border:1px solid #ffe2a8;border-radius:12px;padding:14px 16px;font-size:14px;line-height:1.7;margin-top:18px}
+@media (max-width:860px){
+  thead{display:none}table,tbody,tr,td{display:block;width:100%}
+  tr{padding:14px;border-bottom:1px solid var(--line)}td{border:0;padding:5px 0}
+  td::before{content:attr(data-l);display:block;font-size:12px;font-weight:700;color:#8a8fa8}
+  td.msg{max-width:none}
+}
+</style>
+</head>
+<body>
+<div class="login" id="login">
+  <form class="card" id="lf">
+    <img src="/logo.png" alt="네오스애드">
+    <h1>문의 관리자</h1>
+    <p>비밀번호를 입력해 접수된 문의를 확인하세요.</p>
+    <input id="pw" type="password" autocomplete="current-password" placeholder="비밀번호" required autofocus>
+    <button class="btn" type="submit">로그인</button>
+    <p class="err" id="lerr" role="alert"></p>
+  </form>
+</div>
+
+<div class="app" id="app" hidden>
+  <div class="bar">
+    <h1>문의 관리자</h1>
+    <button class="btn ghost" id="refresh" type="button">새로고침</button>
+    <button class="btn ghost" id="csv" type="button">CSV 다운로드</button>
+    <button class="btn ghost" id="logout" type="button">로그아웃</button>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="f">
+    <input id="q" type="search" placeholder="이름·연락처·문의내용 검색">
+    <select id="fs" aria-label="상태 필터"><option value="">전체 상태</option><option>신규</option><option>연락완료</option><option>계약</option><option>보류</option></select>
+    <select id="ft" aria-label="광고유형 필터"><option value="">전체 광고유형</option><option>검색광고</option><option>디스플레이광고</option><option>옥외광고</option><option>바이럴광고</option><option>인플루언서 시딩</option></select>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>접수일시</th><th>이름/브랜드</th><th>연락처</th><th>광고유형</th><th>홈페이지</th><th>문의내용</th><th>상태</th><th>메모</th></tr></thead>
+    <tbody id="tb"></tbody></table>
+    <div class="empty" id="empty" hidden>표시할 문의가 없습니다.</div>
+  </div>
+  <p class="note">상태와 메모는 선택·입력 후 자동 저장됩니다. 저장 확인은 새로고침으로 하실 수 있습니다.</p>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script src="/site-config.js"></script>
+<script>
+(function(){
+  var API=window.NEOSAD_FORM_ENDPOINT||'',KEY='neosad_admin_pw',rows=[],pw='';
+  var $=function(id){return document.getElementById(id)};
+  function store(k,v){try{if(v==null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,v)}catch(e){}}
+  function load(k){try{return sessionStorage.getItem(k)||''}catch(e){return ''}}
+  function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(function(){t.classList.remove('on')},2200)}
+  async function api(params){
+    var r=await fetch(API+'?'+new URLSearchParams(params));
+    return r.json();
+  }
+  async function login(p,silent){
+    if(!API){$('lerr').textContent='구글 시트 연결 전입니다. site-config.js에 웹 앱 URL을 입력해 주세요.';return}
+    $('lerr').textContent='';
+    try{
+      var j=await api({action:'list',pw:p});
+      if(!j.ok){if(!silent)$('lerr').textContent=j.error==='auth'?'비밀번호가 올바르지 않습니다.':'불러오지 못했습니다.';store(KEY,null);return}
+      pw=p;store(KEY,p);rows=j.rows||[];$('login').hidden=true;$('app').hidden=false;render()
+    }catch(e){if(!silent)$('lerr').textContent='연결에 실패했습니다. 웹 앱 URL과 배포 설정(액세스: 모든 사용자)을 확인해 주세요.'}
+  }
+  var statusFilter='';
+  function counts(){var c={'':rows.length,'신규':0,'연락완료':0,'계약':0,'보류':0};rows.forEach(function(r){if(c[r.status]!=null)c[r.status]++});return c}
+  function renderStats(){
+    var c=counts(),h='';
+    [['','전체'],['신규','신규'],['연락완료','연락완료'],['계약','계약'],['보류','보류']].forEach(function(s){
+      h+='<button type="button" class="st'+(statusFilter===s[0]?' on':'')+'" data-s="'+s[0]+'"><b>'+c[s[0]]+'</b><span>'+s[1]+'</span></button>'});
+    $('stats').innerHTML=h;
+    [].forEach.call($('stats').querySelectorAll('.st'),function(b){b.onclick=function(){statusFilter=b.getAttribute('data-s');$('fs').value=statusFilter;render()}})
+  }
+  function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+  function td(label){var t=document.createElement('td');t.setAttribute('data-l',label);return t}
+  function render(){
+    renderStats();
+    var q=$('q').value.trim().toLowerCase(),ft=$('ft').value,fs=$('fs').value;statusFilter=fs;
+    var list=rows.filter(function(r){
+      if(fs&&r.status!==fs)return false;
+      if(ft&&String(r.types).indexOf(ft)<0)return false;
+      if(q&&(r.name+' '+r.phone+' '+r.msg+' '+r.site).toLowerCase().indexOf(q)<0)return false;
+      return true});
+    var tb=$('tb');tb.innerHTML='';$('empty').hidden=list.length>0;
+    list.forEach(function(r){
+      var tr=document.createElement('tr');
+      var c=td('접수일시');c.textContent=r.at;tr.appendChild(c);
+      c=td('이름/브랜드');c.textContent=r.name;c.style.fontWeight='700';tr.appendChild(c);
+      c=td('연락처');var a=el('a',null,r.phone);a.href='tel:'+String(r.phone).replace(/[^0-9+]/g,'');c.appendChild(a);tr.appendChild(c);
+      c=td('광고유형');String(r.types||'').split(',').forEach(function(t){t=t.trim();if(t)c.appendChild(el('span','tag',t))});tr.appendChild(c);
+      c=td('홈페이지');if(r.site){var u=String(r.site);var l=el('a',null,u);if(/^https?:\/\//i.test(u)){l.href=u;l.target='_blank';l.rel='noopener noreferrer'}c.appendChild(l)}tr.appendChild(c);
+      c=td('문의내용');c.className='msg';c.textContent=r.msg;tr.appendChild(c);
+      c=td('상태');var s=el('select','s');['신규','연락완료','계약','보류'].forEach(function(o){var op=el('option',null,o);if(o===r.status)op.selected=true;s.appendChild(op)});s.setAttribute('data-v',r.status);
+      s.onchange=function(){r.status=s.value;s.setAttribute('data-v',s.value);save(r);renderStats()};c.appendChild(s);tr.appendChild(c);
+      c=td('메모');var m=el('textarea','memo');m.value=r.memo||'';m.setAttribute('aria-label','메모');m.onchange=function(){r.memo=m.value;save(r)};c.appendChild(m);tr.appendChild(c);
+      tb.appendChild(tr)})
+  }
+  function save(r){
+    fetch(API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'update',pw:pw,id:r.id,status:r.status,memo:r.memo||''})})
+      .then(function(){toast('저장했습니다')}).catch(function(){toast('저장에 실패했습니다')})
+  }
+  function csvCell(v){v=String(v==null?'':v);if(/^[=+\-@]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"'}
+  $('csv').onclick=function(){
+    var h=['접수일시','이름/브랜드','연락처','광고유형','홈페이지','문의내용','상태','메모'];
+    var out=[h.map(csvCell).join(',')].concat(rows.map(function(r){return [r.at,r.name,r.phone,r.types,r.site,r.msg,r.status,r.memo].map(csvCell).join(',')}));
+    var b=new Blob(['﻿'+out.join('\r\n')],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');
+    a.href=URL.createObjectURL(b);a.download='neosad_inquiries_'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();a.remove()
+  };
+  $('refresh').onclick=function(){login(pw,true).then(function(){toast('새로고침했습니다')})};
+  $('logout').onclick=function(){store(KEY,null);pw='';rows=[];$('app').hidden=true;$('login').hidden=false;$('pw').value=''};
+  $('lf').onsubmit=function(e){e.preventDefault();login($('pw').value)};
+  $('q').oninput=render;$('ft').onchange=render;$('fs').onchange=render;
+  var saved=load(KEY);if(saved)login(saved,true);
+})();
+</script>
+</body>
+</html>

@@ -269,6 +269,7 @@ html.js .rv.in{opacity:1;transform:none}
 .pmock.hw{min-height:150px}
 .pmock.hw p{margin-top:8px;font-size:12.5px}
 .jf.four{padding:18px 10px;gap:0}.jf.four .jp{font-size:12px;padding:9px 8px}
+.vres{margin-top:0}
 </style>
 <link rel="icon" href="/favicon.png" type="image/png"><link rel="icon" href="/favicon.ico" sizes="48x48">
 </head>
@@ -296,13 +297,11 @@ html.js .rv.in{opacity:1;transform:none}
       </div>
       <div class="vs" id="vs" aria-hidden="true">
         <div class="vwin">
-          <div class="sbar"><span class="av"></span><span class="kw"></span></div>
           <div class="vres">
             <div class="vr1 r1"><span class="src">인플루언서 피드</span><b>요즘 매일 쓰는 템 공유해요</b><p>제 피부엔 OOO이 제일 잘 맞더라구요. 직접 써보고 솔직하게 남겨요.</p><span class="ok">관심</span></div>
             <div class="vr1 r2"><span class="src">팬 댓글</span><b>저도 궁금했어요!</b><p>이거 어디서 살 수 있어요? 링크 알려주세요.</p><span class="ok">관심</span></div>
             <div class="vr1 r3"><span class="src">저장 · 공유</span><b>친구한테도 공유했어요</b><p>팔로워분들 사이에서 먼저 입소문이 나기 시작해요.</p><span class="ok">관심</span></div>
           </div>
-          <button class="pay" type="button" tabindex="-1">결제하기</button>
         </div>
       </div>
     </div>
@@ -404,12 +403,9 @@ html.js .rv.in{opacity:1;transform:none}
     while(true){for(var k=1;k<=W.length;k++){word.textContent=W.slice(0,k);await wait(150)}
       await wait(4200);for(var k=W.length-1;k>=0;k--){word.textContent=W.slice(0,k);await wait(70)}await wait(600)}})();
   /* hero: search -> reviews build trust -> pay */
-  var vs=document.getElementById('vs'),kw=vs.querySelector('.kw'),pay=vs.querySelector('.pay'),Q='이거 어디서 살 수 있어요?';
+  var vs=document.getElementById('vs');
   (async function(){while(true){
-    vs.className='vs';kw.textContent='';pay.textContent='결제하기';await wait(800);
-    for(var k=1;k<=Q.length;k++){kw.textContent=Q.slice(0,k);await wait(120)}
-    await wait(500);vs.classList.add('s2');await wait(1700);vs.classList.add('s3');await wait(1700);
-    vs.classList.add('s4');pay.textContent='결제 완료';await wait(2600);vs.className='vs';await wait(500)}})();
+    vs.className='vs';await wait(900);vs.classList.add('s2');await wait(1700);vs.classList.add('s3');await wait(3200);vs.className='vs';await wait(600)}})();
   var els=document.querySelectorAll('.rv,.cc,.pc');
   if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.18});els.forEach(function(e){io.observe(e)})}
   else els.forEach(function(e){e.classList.add('in')});

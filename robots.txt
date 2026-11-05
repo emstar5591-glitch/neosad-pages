@@ -2,4 +2,8 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 
+User-agent: Yeti
+Allow: /
+Disallow: /admin/
+
 Sitemap: https://neosad.kr/sitemap.xml
